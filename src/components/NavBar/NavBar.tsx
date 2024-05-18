@@ -1,7 +1,19 @@
 import {Nav, Navbar, Form, Container,} from "react-bootstrap";
 import style from "./navbar.module.css";
+import {useState} from "react";
 
-function NavBar() {
+interface NavBarProps {
+    filterbySearch:(title:string)=>void
+}
+
+function NavBar(props:NavBarProps) {
+
+    const [title, setTitle] = useState("")
+    const onSearch =(event: { preventDefault: () => void; })=>{
+        event.preventDefault();
+        props.filterbySearch(title);
+        setTitle("");
+    }
     return(
         <Navbar expand="lg" bg="dark" data-bs-theme="dark">
             <Container>
@@ -16,8 +28,10 @@ function NavBar() {
                         navbarScroll
                     >
                     </Nav>
-                    <Form className="d-flex">
+                    <Form className="d-flex" method={"get"}>
                         <Form.Control
+                            value={title}
+                            onChange={(event)=>{setTitle(event.target.value)}}
                             type="text"
                             placeholder="ابحث ..."
                             className={`mx-2 ${style.search}`}
@@ -26,7 +40,7 @@ function NavBar() {
                                 color: 'black',
                             }}
                         />
-                        <button className="btn-search">بحث</button>
+                        <button className="btn-search" onClick={onSearch}>بحث</button>
                     </Form>
                 </Navbar.Collapse>
             </Container>

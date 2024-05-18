@@ -8,12 +8,29 @@ import {useState} from "react";
 
 function App() {
   const [itemsData, setItemsData] = useState(items);
+  const allCategory=['الكل', ... new Set(items.map(item=>item.category))]
+  const filterByCategory = (category:string)=>{
+    if (category!="الكل"){
+      const newItemsData=items.filter(item=>item.category==category)
+      setItemsData(newItemsData);
+    }else{
+      setItemsData(items);
+    }
+  }
+  const filterBySearch = (title:string)=>{
+    if (title!=""){
+      const newItemsData=items.filter(item=>item.title==title)
+      setItemsData(newItemsData);
+    }else{
+      setItemsData(items);
+    }
+  }
   return (
     <div className={"color-body font"}>
-      <NavBar/>
+      <NavBar filterbySearch={filterBySearch}/>
         <Container>
           <Header/>
-          <Category/>
+          <Category filterByCategory={filterByCategory} allCategory={allCategory}/>
           <IteamList itemsData={itemsData}/>
         </Container>
     </div>
